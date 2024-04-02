@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ad778f42b3.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+      integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+      integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/buttons.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center align-items-center border border-dark">
+                <div style="height: 100vh;" class="d-flex justify-content-center align-items-center">
+                    <!-- Register Box -->
+                    <div class="border border-secondary p-5 rounded-3" id="RegisterBox">
+                        <div class="text-center">
+                            <img src="./images/logo.png" alt="logo" width="100%" />
+                            <h3 class="fw-bolder morange">ĐĂNG KÝ TÀI KHOẢN</h3>
+                        </div>
+                        <form action="/register" method="POST">
+                            <div class="mb-3 mt-3">
+                                <label for="register_email" class="form-label text-dark">Email:</label>
+                                <input type="email" class="form-control" id="register_email" placeholder="Vui lòng nhập địa chỉ email..." name="register_email" maxlength="255" required />
+                            </div>
+                            <div class="text-end">
+                                <button type="button" onclick="registerAccount();" class="button5">Đăng Ký</button>
+                            </div>
+                        </form>
+                        <div class="mb-3 mt-3">
+                            <a href="javascript:void(0)" class="small">Đăng ký bằng số điện thoại</a>
+                            hoặc
+                            <p onclick="showLoginBox();">Đã có tài khoản? <a href="javascript:void(0);">Đăng nhập <i class="fa-solid fa-square-up-right"></i>
+                            </a></p>
+                        </div>
+                    </div>
+                    <!-- Login Box -->
+                    <div class="border border-secondary p-5 rounded-3 d-none" id="LoginBox">
+                        <div class="text-center">
+                            <img src="./images/logo.png" alt="logo" width="100%" />
+                            <h3 class="fw-bolder mblue">ĐĂNG NHẬP TÀI KHOẢN</h3>
+                        </div>
+                        <form action="/login" method="POST">
+                            <div class="mb-3 mt-3">
+                                <label for="login_email" class="form-label text-dark">Tài khoản:</label>
+                                <input type="email" class="form-control" id="login_email" placeholder="Nhập địa chỉ email..." name="login_email" required />
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <label for="login_password" class="form-label text-dark">Password:</label>
+                                <input type="password" class="form-control" id="login_password" placeholder="Nhập mật khẩu..." name="login_password" required />
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me" value="something" checked />
+                                <label class="form-check-label">Ghi nhớ</label>
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="button9" onclick="loginAccount();">Đăng Nhập</button>
+                            </div>
+                        </form>
+                        <div class="mb-3 mt-3">
+                            <p onclick="showRegisterBox();">Chưa có tài khoản? <a href="javascript:void(0);">Đăng ký ngay <i class="fa-solid fa-square-up-right"></i>
+                            </a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+
+        });
+
+        function showLoginBox() {
+            $("#RegisterBox").addClass('d-none');
+            $("#LoginBox").removeClass('d-none');
+        }
+
+        function showRegisterBox() {
+            $("#LoginBox").addClass('d-none');
+            $("#RegisterBox").removeClass('d-none');
+        }
+
+        function registerAccount() {
+            const register_email = $("#register_email").val();
+            $.ajax({
+                url: '/register',
+                method: 'POST',
+                data: { register_email },
+                success: (response) => {
+                    toastr.success(response, 'Successfully');
+                    $("#register_email").val("");
+                }, error: (error) => {
+                    console.error('error=', error);
+                    toastr.error(error.responseText, 'Error');
+                }
+            });
+        }
+
+        function loginAccount() {
+            const login_email = $("#login_email").val();
+            const login_password = $("#login_password").val();
+            $.ajax({
+                url: '/login',
+                method: 'POST',
+                data: { login_email, login_password },
+                success: (response) => {
+                    window.location.href = '/home';
+                }, error: (error) => {
+                    console.error('error=', error);
+                    toastr.error(error.responseText, 'Error');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

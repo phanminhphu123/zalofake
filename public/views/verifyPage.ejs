@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="referrer" />
+    <title>ZaloFake</title>
+    <script src="https://kit.fontawesome.com/ad778f42b3.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+      integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+      integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./css/common.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 d-flex justify-content-center align-items-center" style="height: 100vh">
+          <% if(payload) { %>
+          <form action="/verify" method="POST" id="verifyForm" enctype="multipart/form-data">
+            <div class="border border-dark rounded-2 p-5" style="font-size: large">
+              <div class="text-center">
+                <img src="./images/logo.png" alt="logo" />
+                <h3 class="fw-bolder morange">XÁC THỰC TÀI KHOẢN</h3>
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="fullname" class="form-label text-dark"><b>1</b>. Họ Và Tên:</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Vui lòng nhập họ và tên..">
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="birthday" class="form-label text-dark"><b>2</b>. Chọn ngày sinh:</label>
+                <input type="date" class="form-control" id="birthday" name="birthday">
+              </div>
+              <div class="mb-3 mt-3">
+                <label class="form-label text-dark"><b>3</b>. Chọn giới tính:</label>
+                <br>
+                <div class="d-flex">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="male" name="gender" value="male" checked>Nam
+                    <label class="form-check-label" for="male"></label>
+                  </div>
+                  &emsp;
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="female" name="gender" value="female" checked>Nữ
+                    <label class="form-check-label" for="female"></label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="password" class="form-label text-dark"><b>4</b>. Đặt Mật khẩu:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu..">
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="repassword" class="form-label text-dark">Đặt lại Mật khẩu:</label>
+                <input type="password" class="form-control" id="repassword" name="repassword" placeholder="Nhập lại mật khẩu..">
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="avatar" class="form-label text-dark"><b>5</b>. Upload Avatar:</label>
+                <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" required />
+              </div>
+              <div class="text-end mt-3">
+                <button class="btn btn-primary" type="button" onclick="verifyAccount();">Xác thực</button>
+              </div>
+            </div>
+          </form>
+          <% } %>
+        </div>
+        <div class="col-4"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function () {})
+
+    function verifyAccount() {
+      const fullname = $('#fullname').val();
+      const birthdayValue = $("#birthday").val();
+      const gender = $('input[name="gender"]:checked').val();
+      const password = $("#password").val();
+      const repassword = $("#repassword").val();
+      const avatar = document.getElementById("avatar");
+
+      console.log('fullname=', fullname);
+      console.log('birthdayValue=', birthdayValue);
+      console.log('gender=', gender);
+      console.log('password=', password);
+      console.log('repassword=', repassword);
+      console.log('avatar=', avatar);
+
+      if(!fullname) {
+        toastr.error('Fullname', 'Invalid');
+        return false;
+      }
+      if (!birthdayValue) {
+            alert("Vui lòng chọn ngày sinh.");
+            return false; // Không thực hiện hành động tiếp theo
+      }
+      if(!password || password.length < 8) {
+        toastr.error('Password', 'Invalid');
+        return false;
+      }
+      if(!repassword) {
+        toastr.error('RePassword', 'Invalid');
+        return false;
+      }
+      if(password !== repassword) {
+        toastr.error('Password and repassword not match', 'Invalid');
+        return false;
+      }
+      if (avatar.files.length === 0) {
+            alert("Vui lòng chọn hình ảnh avatar.");
+            return false; // Không thực hiện hành động tiếp theo
+      }
+
+      $("#verifyForm").submit();
+    }
+  </script>
+</html>
